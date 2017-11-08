@@ -8,11 +8,23 @@ import server.Message;
 
 public class Client {
   Socket clientSocket;
+  ObjectOutputStream outPutStream;
+  ObjectInputStream inPutStream;
+
+  public void connect() {
+    System.out.println("Client connecting...");
+    try {
+      clientSocket = new Socket("localhost", 8081);
+      outPutStream = new ObjectOutputStream(clientSocket.getOutputStream());
+      inPutStream = new ObjectInputStream(clientSocket.getInputStream());
+      System.out.println("Client streams created!");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
   public void sendMessage(String user, String message) {
-    System.out.println("Starting client...");
-    ObjectOutputStream outPutStream;
-    ObjectInputStream inPutStream;
+    System.out.println("Client sending....");
 
     Message messageToSend = new Message();
     messageToSend.setUser(user);
@@ -20,31 +32,16 @@ public class Client {
     messageToSend.setRecived(false);
 
     try {
-
-      clientSocket = new Socket("localhost", 8081);
-
-      inPutStream = new ObjectInputStream(clientSocket.getInputStream());
-      outPutStream = new ObjectOutputStream(clientSocket.getOutputStream());
-
-
-
-      System.out.println("Sending....");
       outPutStream.writeObject(messageToSend);
+      System.out.println("Message sent");
+      Message messageFromServer = (Message) inPutStream.readObject();
+      System.out.println("Server recived message? " + messageFromServer.isRecived());
 
-      try {
-        Message messageFromServer = (Message) inPutStream.readObject();
-        System.out.println("Message recived: " + messageFromServer.isRecived());
-      } catch (ClassNotFoundException e) {
-        e.printStackTrace();
-      }
-
-
-    } catch (IOException e) {
-      System.out.println(" error " + e.getMessage());
+    } catch (IOException | ClassNotFoundException e) {
       e.printStackTrace();
     }
   }
-  
+
   public void close() throws IOException {
     clientSocket.close();
   }

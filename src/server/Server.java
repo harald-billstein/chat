@@ -12,7 +12,7 @@ public class Server {
 
   private ServerSocket serverSocket;
   private Socket clientSocket;
-  private SocketManager socketManager;
+  private ClientManager socketManager;
   private int port;
 
 
@@ -22,11 +22,11 @@ public class Server {
   }
 
   private void Init() {
-    socketManager = new SocketManager();
+    socketManager = new ClientManager();
   }
 
   public void startListen() {
-    System.out.println("Server");
+    System.out.println("Server started listening...");
     boolean listen = false;
     try {
       serverSocket = new ServerSocket(port);
@@ -35,11 +35,21 @@ public class Server {
       System.out.println("Error 101, in Server: " + e.getMessage());
       e.printStackTrace();
     }
-    
+
     while (listen) {
       try {
+        System.out.println("Server listening!");
         clientSocket = serverSocket.accept();
-        socketManager.test(clientSocket);
+        System.out.println("Client Connected!");
+
+        Thread thread = new Thread() {
+          public void run() {
+            System.out.println("new thread created");
+            socketManager.processClient(clientSocket);
+          }
+        };
+
+        thread.start();
 
       } catch (IOException e) {
         System.out.println("Error 102, in Server: " + e.getMessage());
