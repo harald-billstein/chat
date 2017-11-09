@@ -1,3 +1,5 @@
 FROM openjdk:8-jdk
-WORKDIR /src/server/
-RUN javac -d ./ -sourcepath src src/server/Main.java
+WORKDIR ./
+ADD ./ ./
+RUN javac -cp src/ src/Main.java
+CMD java -cp ./src Main
