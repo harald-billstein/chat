@@ -2,6 +2,9 @@ package server;
 
 public interface clientManagerInterface {
   
-  public void messageDistribution(Message message);
+  void messageDistribution(Message message);
+
+  void removeClientFromSwarm(Client client);
+
 
 }

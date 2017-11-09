@@ -7,18 +7,26 @@ public class Main {
   static String message;
 
   public static void main(String[] args) {
+    boolean runChat = true;
+    Scanner scanner = new Scanner(System.in);
+    System.out.print("User: ");
+    user = scanner.nextLine();
+    
     Client client = new Client();
+    client.setUserName(user);
     client.connect();
-//    Scanner scanner = new Scanner(System.in);
-//    System.out.print("User: ");
-//    String user = scanner.nextLine();
-//    System.out.print("Message: ");
-//    String message = scanner.nextLine();
-    client.sendMessage("Harald", "message1");
 
-    Client client2 = new Client();
-    client2.connect();
-    client2.sendMessage("Lisette", "message2");
+    System.out.print("==>");
+    while (runChat) {
+      message = scanner.nextLine();
+      if (message.equals("$$EXIT")) {
+        runChat = false;
+      } else {
+        client.sendMessage(user, message);        
+      }
+    }
+    scanner.close();
+    System.out.println("Chat closed!");
+    System.exit(0); 
   }
-
 }

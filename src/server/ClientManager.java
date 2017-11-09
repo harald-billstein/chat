@@ -3,12 +3,13 @@ package server;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class ClientManager implements clientManagerInterface {
 
   private List<Client> clientList;
-  
+
   public ClientManager() {
     init();
   }
@@ -18,24 +19,30 @@ public class ClientManager implements clientManagerInterface {
   }
 
   public void processClient(Socket socket) {
-    System.out.println("processClient");
-    
+
     Client client = new Client(socket);
     client.setObserver(this);
     client.startIncommigMessageListener();
-    clientList.add(client);  
+    client.setClientName("client:" + (clientList.size() + 1));
+    clientList.add(client);
+    System.out.println("Clients connected: " + clientList.size());
   }
 
   @Override
   public void messageDistribution(Message message) {
-    
-    for (Client client: clientList) {
-      System.out.println(client.getClientName() + " gets message from " + message.getUser() + " message: " + message.getMessage() );
+    System.out.println(new Date().toString() + " Message from: " + message.getUser());
+    for (Client client : clientList) {
       client.sendMessage(message);
     }
-
-    
   }
+
+  @Override
+  public void removeClientFromSwarm(Client client) {
+    clientList.remove(client);
+    System.out.println("User: " + client.getClientName() + " disconnected!");
+    System.out.println("Clients connected: " + clientList.size());
+  }
+
 }
 
 

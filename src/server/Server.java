@@ -1,12 +1,8 @@
 package server;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import javax.naming.InitialContext;
-import javax.swing.text.StyledEditorKit.BoldAction;
 
 public class Server {
 
@@ -26,8 +22,8 @@ public class Server {
   }
 
   public void startListen() {
-    System.out.println("Server started listening...");
     boolean listen = false;
+    
     try {
       serverSocket = new ServerSocket(port);
       listen = true;
@@ -36,15 +32,15 @@ public class Server {
       e.printStackTrace();
     }
 
+    System.out.println("Server Started!");
+    //threadCounter();
     while (listen) {
       try {
-        System.out.println("Server listening!");
         clientSocket = serverSocket.accept();
         System.out.println("Client Connected!");
 
         Thread thread = new Thread() {
           public void run() {
-            System.out.println("new thread created");
             socketManager.processClient(clientSocket);
           }
         };
@@ -57,6 +53,24 @@ public class Server {
       }
     }
 
+  }
+
+  private void threadCounter() {
+    Thread threadCounter = new Thread() {
+      public void run() {
+
+        while (true) {
+          System.out.println("Active threads: " + Thread.activeCount());
+          try {
+            Thread.sleep(20000);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+
+      }
+    };
+    threadCounter.start();
   }
 
 }
