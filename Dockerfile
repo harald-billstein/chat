@@ -1,3 +1,6 @@
 FROM openjdk:8-jdk
-WORKDIR /src/server/
-RUN javac -d ./ -sourcepath src src/server/Main.java
+WORKDIR ./
+COPY src/ /src/
+RUN ls -la /src/server/*
+RUN javac -cp ./ src/server/Main.java
+CMD java -cp ./src/server/ Main
