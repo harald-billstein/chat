@@ -1,5 +1,6 @@
 FROM openjdk:8-jdk
 WORKDIR ./
-ADD ./ ./
-RUN javac -cp src/ src/server/Main.java
-CMD java -cp ./src Main
+COPY src/ /src/
+RUN ls -la /src/server/*
+RUN javac -cp src/server/ src/server/Main.java
+CMD java -cp ./src/server/ Main
