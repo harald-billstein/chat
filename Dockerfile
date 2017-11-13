@@ -1,5 +1,6 @@
 FROM openjdk:8-jdk
 WORKDIR ./
 ADD ./ ./
-RUN javac -cp src/ src/server/Main.java
-CMD java -cp ./src Main
+RUN javac -d build -cp src/ src/server/*.java
+CMD java -cp build server.Main
+EXPOSE 8081
