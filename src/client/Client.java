@@ -12,15 +12,19 @@ public class Client {
   private ObjectInputStream inPutStream;
   private Message message;
   private String userName;
+  private String ip;
+  private int port;
 
+  public void connect(String ip, int port) {
+    this.ip = ip;
+    this.port = port;
 
-  public void connect() {
     boolean connectionSuccess = false;
 
     while (!connectionSuccess) {
       try {
         System.out.println("Client connecting...");
-        clientSocket = new Socket("localhost", 8081);
+        clientSocket = new Socket(ip, port);
         outPutStream = new ObjectOutputStream(clientSocket.getOutputStream());
         inPutStream = new ObjectInputStream(clientSocket.getInputStream());
         listenToIncommingMessages();
@@ -55,11 +59,12 @@ public class Client {
 
           } catch (ClassNotFoundException | IOException e1) {
             listen = false;
+            //close();
             System.out.println("lost connection to server!");
           }
         }
         if (!listen) {
-          connect();
+          connect(ip, port);
         }
       }
     };
@@ -78,16 +83,24 @@ public class Client {
 
     } catch (IOException e) {
       System.out.println("Connection to server lost!");
-      connect();
+      connect(ip, port);
     }
-  }
-
-  public void close() throws IOException {
-    clientSocket.close();
   }
 
   public void setUserName(String userName) {
     this.userName = userName;
+
+  }
+
+  public void close() {
+    try {
+      clientSocket.close();
+      outPutStream.close();
+      inPutStream.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
 
   }
 }

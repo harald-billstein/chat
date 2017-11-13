@@ -8,7 +8,7 @@ public class Server {
 
   private ServerSocket serverSocket;
   private Socket clientSocket;
-  private ClientManager socketManager;
+  private ClientManager clientManager;
   private int port;
 
 
@@ -18,7 +18,7 @@ public class Server {
   }
 
   private void Init() {
-    socketManager = new ClientManager();
+    clientManager = new ClientManager();
   }
 
   public void startListen() {
@@ -33,7 +33,7 @@ public class Server {
     }
 
     System.out.println("Server Started!");
-    //threadCounter();
+    threadCounter();
     while (listen) {
       try {
         clientSocket = serverSocket.accept();
@@ -41,7 +41,7 @@ public class Server {
 
         Thread thread = new Thread() {
           public void run() {
-            socketManager.processClient(clientSocket);
+            clientManager.processClient(clientSocket);
           }
         };
 
@@ -49,10 +49,19 @@ public class Server {
 
       } catch (IOException e) {
         System.out.println("Error 102, in Server: " + e.getMessage());
+        closeClientSocket(clientSocket);
         e.printStackTrace();
       }
     }
 
+  }
+  
+  public void closeClientSocket(Socket socket) {
+    try {
+      socket.close();
+    } catch (IOException e) {
+      System.out.println("Error 103, in Server: " + e.getMessage());
+    }
   }
 
   private void threadCounter() {
@@ -64,6 +73,7 @@ public class Server {
           try {
             Thread.sleep(20000);
           } catch (InterruptedException e) {
+            System.out.println("Thread counter");
             e.printStackTrace();
           }
         }

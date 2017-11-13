@@ -19,8 +19,9 @@ public class ClientManager implements clientManagerInterface {
   }
 
   public void processClient(Socket socket) {
-
+    
     Client client = new Client(socket);
+    clientList.contains(client);
     client.setObserver(this);
     client.startIncommigMessageListener();
     client.setClientName("client:" + (clientList.size() + 1));
@@ -38,6 +39,7 @@ public class ClientManager implements clientManagerInterface {
 
   @Override
   public void removeClientFromSwarm(Client client) {
+    client.close();
     clientList.remove(client);
     System.out.println("User: " + client.getClientName() + " disconnected!");
     System.out.println("Clients connected: " + clientList.size());

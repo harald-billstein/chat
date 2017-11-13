@@ -18,6 +18,7 @@ public class Client {
     try {
       outPutStream.writeObject(message);
     } catch (IOException e) {
+      System.out.println("Send message error");
       e.printStackTrace();
     }
   }
@@ -34,6 +35,7 @@ public class Client {
             clientManagerInterface.messageDistribution(message);            
           }
         } catch (IOException | ClassNotFoundException e) {
+          System.out.println("Start listening Error");
           removeClientFromSwarm();
         }
       }
@@ -42,6 +44,7 @@ public class Client {
   }
 
   private void removeClientFromSwarm() {
+   
     clientManagerInterface.removeClientFromSwarm(this);
   }
 
@@ -61,12 +64,26 @@ public class Client {
   private void init() {
     try {
       outPutStream = new ObjectOutputStream(socket.getOutputStream());
+      outPutStream.flush();
       inPutStream = new ObjectInputStream(socket.getInputStream());
 
     } catch (Exception e) {
+      System.out.println("init Error!");
       e.printStackTrace();
     }
 
+  }
+  
+  public void close() {
+    try {
+      socket.close();
+      outPutStream.close();
+      inPutStream.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    
+    
   }
 
   public void setObserver(clientManagerInterface clientManagerInterface) {
