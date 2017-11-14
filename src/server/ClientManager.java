@@ -19,7 +19,7 @@ public class ClientManager implements clientManagerInterface {
   }
 
   public void processClient(Socket socket) {
-    
+
     Client client = new Client(socket);
     clientList.contains(client);
     client.setObserver(this);

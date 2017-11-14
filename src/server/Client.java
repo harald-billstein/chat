@@ -28,11 +28,11 @@ public class Client {
     Thread thread = new Thread() {
       public void run() {
         try {
-          
-          while(true) {
+
+          while (true) {
             message = (Message) inPutStream.readObject();
             clientName = message.getUser();
-            clientManagerInterface.messageDistribution(message);            
+            clientManagerInterface.messageDistribution(message);
           }
         } catch (IOException | ClassNotFoundException e) {
           System.out.println("Start listening Error");
@@ -44,7 +44,7 @@ public class Client {
   }
 
   private void removeClientFromSwarm() {
-   
+
     clientManagerInterface.removeClientFromSwarm(this);
   }
 
@@ -73,7 +73,7 @@ public class Client {
     }
 
   }
-  
+
   public void close() {
     try {
       socket.close();
@@ -82,8 +82,8 @@ public class Client {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    
-    
+
+
   }
 
   public void setObserver(clientManagerInterface clientManagerInterface) {

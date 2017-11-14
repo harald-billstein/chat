@@ -9,20 +9,20 @@ public class Main {
   static int port;
 
   public static void main(String[] args) {
-    
+
     if (args.length > 0) {
       ip = args[0];
-      port = Integer.parseInt(args[1]);      
+      port = Integer.parseInt(args[1]);
     } else {
       ip = "localhost";
       port = 8081;
     }
-    
+
     boolean runChat = true;
     Scanner scanner = new Scanner(System.in);
     System.out.print("User: ");
     user = scanner.nextLine();
-    
+
     Client client = new Client();
     client.setUserName(user);
     client.connect(ip, port);
@@ -33,11 +33,11 @@ public class Main {
       if (message.equals("$$EXIT")) {
         runChat = false;
       } else {
-        client.sendMessage(user, message);        
+        client.sendMessage(user, message);
       }
     }
     scanner.close();
     System.out.println("Chat closed!");
-    System.exit(0); 
+    System.exit(0);
   }
 }

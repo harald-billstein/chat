@@ -59,12 +59,8 @@ public class Client {
 
           } catch (ClassNotFoundException | IOException e1) {
             listen = false;
-            //close();
             System.out.println("lost connection to server!");
           }
-        }
-        if (!listen) {
-          connect(ip, port);
         }
       }
     };

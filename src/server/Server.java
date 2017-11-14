@@ -23,13 +23,13 @@ public class Server {
 
   public void startListen() {
     boolean listen = false;
-    
+
     try {
       serverSocket = new ServerSocket(port);
       listen = true;
     } catch (IOException e) {
       System.out.println("Error 101, in Server: " + e.getMessage());
-      e.printStackTrace();
+      shutDownServer();
     }
 
     System.out.println("Server Started!");
@@ -55,13 +55,17 @@ public class Server {
     }
 
   }
-  
+
   public void closeClientSocket(Socket socket) {
     try {
       socket.close();
     } catch (IOException e) {
       System.out.println("Error 103, in Server: " + e.getMessage());
     }
+  }
+
+  public void shutDownServer() {
+    System.exit(0);
   }
 
   private void threadCounter() {
@@ -71,7 +75,7 @@ public class Server {
         while (true) {
           System.out.println("Active threads: " + Thread.activeCount());
           try {
-            Thread.sleep(20000);
+            Thread.sleep(10000);
           } catch (InterruptedException e) {
             System.out.println("Thread counter");
             e.printStackTrace();
